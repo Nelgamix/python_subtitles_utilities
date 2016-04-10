@@ -25,15 +25,15 @@ def create_time(mt):
 
 
 class Time:
-    def __init__(self, hours = 0, minutes = 0, seconds = 0, milliseconds = 0):
+    def __init__(self, hours=0, minutes=0, seconds=0, milliseconds=0):
         self.hours = hours
         self.minutes = minutes
         self.seconds = seconds
         self.milliseconds = milliseconds
 
     def get_formatted(self):
-        return str(self.hours).zfill(2) + ':' + str(self.minutes).zfill(2) + ':' +\
-                str(self.seconds).zfill(2) + ',' + str(self.milliseconds).zfill(3)
+        return str(self.hours).zfill(2) + ':' + str(self.minutes).zfill(2) + ':' + \
+               str(self.seconds).zfill(2) + ',' + str(self.milliseconds).zfill(3)
 
     def shift(self, shift):
         self.hours = self.hours + shift.hours
@@ -61,29 +61,47 @@ class Time:
             self.minutes %= 60
 
     def is_before(self, time):
-        if self.hours < time.hours: return True
-        elif self.hours > time.hours: return False
+        if self.hours < time.hours:
+            return True
+        elif self.hours > time.hours:
+            return False
 
-        if self.minutes < time.minutes: return True
-        elif self.minutes > time.minutes: return False
+        if self.minutes < time.minutes:
+            return True
+        elif self.minutes > time.minutes:
+            return False
 
-        if self.seconds < time.seconds: return True
-        elif self.seconds > time.seconds: return False
+        if self.seconds < time.seconds:
+            return True
+        elif self.seconds > time.seconds:
+            return False
 
-        if self.milliseconds < time.milliseconds: return True
-        elif self.milliseconds > time.milliseconds: return False
-        else: return False
+        if self.milliseconds < time.milliseconds:
+            return True
+        elif self.milliseconds > time.milliseconds:
+            return False
+        else:
+            return False
 
     def is_after(self, time):
-        if self.hours > time.hours: return True
-        elif self.hours < time.hours: return False
+        if self.hours > time.hours:
+            return True
+        elif self.hours < time.hours:
+            return False
 
-        if self.minutes > time.minutes: return True
-        elif self.minutes < time.minutes: return False
+        if self.minutes > time.minutes:
+            return True
+        elif self.minutes < time.minutes:
+            return False
 
-        if self.seconds > time.seconds: return True
-        elif self.seconds < time.seconds: return False
+        if self.seconds > time.seconds:
+            return True
+        elif self.seconds < time.seconds:
+            return False
 
-        if self.milliseconds > time.milliseconds: return True
-        elif self.milliseconds < time.milliseconds: return False
-        else: return False
+        if self.milliseconds > time.milliseconds:
+            return True
+        elif self.milliseconds < time.milliseconds:
+            return False
+        else:
+            return False
