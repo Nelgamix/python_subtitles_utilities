@@ -1,5 +1,6 @@
 from Subtitle import Subtitle, Subtitles
 import sys, os, glob, re, configparser
+from Time import Time
 
 subs = Subtitles()  # Contains all the subtitles
 
@@ -21,7 +22,7 @@ def get_settings():
     config.read(config_file)
 
 
-def move():
+def move(instructions):
     for f in settings['general']['files']:
         file = open(f, 'r')  # Open the file on read mode
 
@@ -54,6 +55,19 @@ def move():
         del line_c
         file.close()
 
+        for inst in instructions:
+            if inst[0] == "shift":
+                subs.shift(inst[1])
+            elif inst[0] == "shift before":
+                subs.shift_before(inst[1], inst[2])
+            elif inst[0] == "shift after":
+                subs.shift_after(inst[1], inst[2])
+            elif inst[0] == "sort":
+                subs.sort()
+            elif inst[0] == "split":
+                subs.split_all()
+            # ...
+
         # USER INSTRUCTION TO MANIPULATE THE SUBS BEFORE WRITING OUT ON A FILE
         # shift(Time(0, 0, 2, 0))
         # subs.shift_after(Time(1), Time(0, 10))
@@ -64,9 +78,78 @@ def move():
         # subs.show_all()
 
         if settings['move']['write_out']:
-            with open(f.split('.')[0] + '_test.' + \
+            with open(f.split('.')[0] + '_corrected.' +
                               f.split('.')[-1], 'w') as fil:
                 subs.write_all(fil)
+
+
+def interactive_mode():
+    instructions = []
+    uinput = "A"
+    while uinput != "":
+        uinput = input("What operation do you want to do? [shift/shift before/shift after/split/sort/list/ok]: ")
+        if uinput == "shift":
+            time = ask_time("to shift")
+            instructions.append(['shift', time])
+        elif uinput == "shift before":
+            time1 = ask_time("before which to shift")
+            time2 = ask_time("to shift")
+            instructions.append(['shift before', time1, time2])
+        elif uinput == "shift after":
+            time1 = ask_time("after which to shift")
+            time2 = ask_time("to shift")
+            instructions.append(['shift after', time1, time2])
+        elif uinput == "split":
+            instructions.append(['split'])
+        elif uinput == "sort":
+            instructions.append(['sort'])
+        elif uinput == "list":
+            for inst in instructions:
+                print(inst[0])
+        elif uinput == "ok":
+            move(instructions)
+            break
+        elif uinput == "debug":
+            for inst in instructions:
+                print(inst[0])
+        elif uinput == "":
+            pass
+        else:
+            print("We didn't catch what you want to do. Retry or enter a blank line to quit.")
+
+
+def ask_time(reason):
+    print("Please enter a time " + reason + ".")
+    hours, minutes, seconds, milliseconds = 0, 0, 0, 0
+    while True:
+        try:
+            hours = int(input("How many hours?: "))
+            break
+        except ValueError:
+            print("This is not a correct time. Please retry.")
+
+    while True:
+        try:
+            minutes = int(input("How many minutes?: "))
+            break
+        except ValueError:
+            print("This is not a correct time. Please retry.")
+
+    while True:
+        try:
+            seconds = int(input("How many seconds?: "))
+            break
+        except ValueError:
+            print("This is not a correct time. Please retry.")
+
+    while True:
+        try:
+            milliseconds = int(input("How many milliseconds?: "))
+            break
+        except ValueError:
+            print("This is not a correct time. Please retry.")
+
+    return Time(hours, minutes, seconds, milliseconds)
 
 
 def rename():
@@ -122,10 +205,10 @@ def rename():
 
             # SUBTITLE CORRESPONDING
             aa = config['DEFAULT']['SUBTITLE_PATTERN']
-            ab = aa.count('0')  # Counting the occurences of 0 in the pattern
+            ab = aa.count('0')  # Counting the occurrences of 0 in the pattern
             ac = aa.index('0')  # Finding the first index of 0 in the pattern
             ad = aa[0:ac] + str(season).zfill(ab) + aa[ac + ab:]  # Replacing the season
-            ae = aa.count('1')  # Counting the occurences of 1 in the pattern
+            ae = aa.count('1')  # Counting the occurrences of 1 in the pattern
             af = aa.index('1')  # Finding the first index of 1 in the pattern
             ag = ad[0:af] + str(episode).zfill(ae) + ad[af + ae:]  # Replacing the episode
             # print(ag)
@@ -166,7 +249,7 @@ def main():
     check_files()
 
     if sys.argv[1] == "move":
-        move()
+        interactive_mode()
     elif sys.argv[1] == "rename":
         rename()
 
