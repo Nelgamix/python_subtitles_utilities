@@ -119,6 +119,13 @@ class Subtitles:
         for sub in self.subs:
             sub.write(file)
 
+    def remove_negative(self):
+        new_list = []
+        for sub in self.subs:
+            if sub.mt > 0:
+                new_list.append(sub)
+        self.subs = new_list
+
     # Shift all the subtitles by the Time provided in 'shift' variable
     # @param shift The time to add
     # @return none

@@ -1,6 +1,8 @@
 from Subtitle import Subtitle, Subtitles
-import sys, os, glob, re, configparser
+import sys, os, glob, re, configparser, shutil
 from Time import Time
+
+# TODO: CUT PARTS
 
 subs = Subtitles()  # Contains all the subtitles
 
@@ -13,13 +15,21 @@ settings = {
     }
 }
 config = configparser.ConfigParser()
+rp = os.path.dirname(os.path.realpath(__file__))
 
 
 def get_settings():
     config_file = 'config.ini'
-    assert os.path.exists(config_file) and os.path.isfile(config_file), "CONFIG FILE DOESN'T EXIST."
+    assert os.path.exists(rp + "/" + config_file) and os.path.isfile(rp + "/" + config_file), "CONFIG FILE DOESN'T EXIST."
 
-    config.read(config_file)
+    config.read(rp + '/' + config_file)
+
+
+def clean():
+    print("Cleaning directory...")
+    for fod in glob.glob('*.srt~'):
+        os.remove(fod)
+        print('Removed ' + fod)
 
 
 def move(instructions):
@@ -79,9 +89,20 @@ def move(instructions):
 
         # subs.show_all()
 
-        if settings['move']['write_out']:
-            with open(f.split('.')[0] + '_corrected.' +
-                              f.split('.')[-1], 'w') as fil:
+        if config['DEFAULT'].getboolean('REMOVE_NEGATIVE_SUBTITLES'):
+            subs.remove_negative()
+
+        if config['DEFAULT'].getboolean('AUTOMATIC_SORT'):
+            subs.sort()
+
+        if config['DEFAULT'].getboolean('FILE_BACKUP'):  # CHANGE THIS PLEASE
+            shutil.copyfile(f, f + "~")
+
+        if config['DEFAULT'].getboolean('FILE_REPLACE'):
+            with open(f, 'w') as fil:
+                subs.write_all(fil)
+        else:
+            with open(f.split('.')[0] + '_corrected.' + f.split('.')[-1], 'w') as fil:
                 subs.write_all(fil)
 
 
@@ -259,6 +280,8 @@ def main():
         interactive_mode()
     elif sys.argv[1] == "rename":
         rename()
+    elif sys.argv[1] == "clean":
+        clean()
 
 
 if __name__ == "__main__":
