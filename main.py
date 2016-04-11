@@ -60,6 +60,8 @@ def move(instructions):
                 subs.shift(inst[1])
             elif inst[0] == "shift before":
                 subs.shift_before(inst[1], inst[2])
+            elif inst[0] == "shift between":
+                subs.shift_between(inst[1], inst[2], inst[3])
             elif inst[0] == "shift after":
                 subs.shift_after(inst[1], inst[2])
             elif inst[0] == "sort":
@@ -95,6 +97,11 @@ def interactive_mode():
             time1 = ask_time("before which to shift")
             time2 = ask_time("to shift")
             instructions.append(['shift before', time1, time2])
+        elif uinput == "shift between":
+            time1 = ask_time("after which to shift")
+            time2 = ask_time("before which to shift")
+            time3 = ask_time("to shift")
+            instructions.append(['shift between', time1, time2, time3])
         elif uinput == "shift after":
             time1 = ask_time("after which to shift")
             time2 = ask_time("to shift")
