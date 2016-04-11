@@ -42,10 +42,15 @@ when you're done.
 
 ## Examples
 ```
-python move_subtitles_.py move subtitle.srt # Runs the move on this file
-python move_subtitles_.py move subtest.srt subtest2.srt # Runs the move on those two files
-python move_subtitles_.py rename # Will run the rename in the actual folder
-python move_subtitles_.py rename ../../Documents/Movies/Movie1 # Runs the rename in the Movie1 directory
+python move_subtitles.py move subtitle.srt # Runs the move on this file
+python move_subtitles.py move subtest.srt subtest2.srt # Runs the move on those two files
+python move_subtitles.py rename # Will run the rename in the actual folder
+python move_subtitles.py rename ../../Documents/Movies/Movie1 # Runs the rename in the Movie1 directory
 python clean # clean the current directory of all .srt~ files
+```
+
+If you have set correctly the python association and the path, you can do this:
+```
+move_subtitles.py [mode] [arg]
 ```
 
