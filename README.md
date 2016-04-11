@@ -1,6 +1,7 @@
-# python_subtitles_utilities
-Python program used to manipulate subtitle files (shifting, renaming...)
-Useful for series
+# Python subtitles utility
+Python program used to manipulate subtitle files (shifting, renaming...).
+
+Useful for series.
 
 ## Usage
 You should have python 3.5 installed, and have it in the PATH.
