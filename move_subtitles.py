@@ -146,36 +146,31 @@ def interactive_mode():
             print("We didn't catch what you want to do. Retry or enter a blank line to quit.")
 
 
+def user_input(description = ""):
+    if description == "":
+        phrase = "Please enter a number: "
+    else:
+        phrase = "How many {}?: ".format(description)
+
+    while True:
+        try:
+            uinput = input(phrase)
+            if uinput != "":
+                uinput = int(uinput)
+            else:
+                return 0
+            return uinput
+        except ValueError:
+            print("This is not a correct time. Please retry.")
+
+
 def ask_time(reason):
     print("Please enter a time " + reason + ".")
-    hours, minutes, seconds, milliseconds = 0, 0, 0, 0
-    while True:
-        try:
-            hours = int(input("How many hours?: "))
-            break
-        except ValueError:
-            print("This is not a correct time. Please retry.")
 
-    while True:
-        try:
-            minutes = int(input("How many minutes?: "))
-            break
-        except ValueError:
-            print("This is not a correct time. Please retry.")
-
-    while True:
-        try:
-            seconds = int(input("How many seconds?: "))
-            break
-        except ValueError:
-            print("This is not a correct time. Please retry.")
-
-    while True:
-        try:
-            milliseconds = int(input("How many milliseconds?: "))
-            break
-        except ValueError:
-            print("This is not a correct time. Please retry.")
+    hours = user_input("hours")
+    minutes = user_input("minutes")
+    seconds = user_input("seconds")
+    milliseconds = user_input("milliseconds")
 
     return Time(hours, minutes, seconds, milliseconds)
 
